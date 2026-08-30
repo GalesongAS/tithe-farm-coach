@@ -25,20 +25,6 @@ items, or send keyboard input. Every game action remains with the player.
 - Purple: ready to harvest
 - Dark red: dead
 
-## Development
-
-This project follows the RuneLite Plugin Hub example-plugin layout and targets
-Java 11. Run a development client with:
-
-```text
-./gradlew run
-```
-
-On Windows, use `gradlew.bat run`.
-
-The route data is maintained as a small set of static in-game coordinates. No
-wiki was harmed (or scraped) in the making of this plugin.
-
 ## Privacy
 
 The plugin does not write gameplay logs, make network requests, or transmit
