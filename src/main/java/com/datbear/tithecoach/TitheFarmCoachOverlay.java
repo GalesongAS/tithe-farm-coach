@@ -29,6 +29,10 @@ final class TitheFarmCoachOverlay extends Overlay {
 
   @Override
   public Dimension render(Graphics2D g) {
+    if (!plugin.isInTitheFarm()) {
+      return null;
+    }
+
     CoachStep step = plugin.getStep();
     List<WorldPoint> route = plugin.getRoute();
     if (config.showRouteNumbers()) {

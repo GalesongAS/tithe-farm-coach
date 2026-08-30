@@ -19,6 +19,10 @@ final class TitheFarmCoachPanel extends OverlayPanel {
 
   @Override
   public Dimension render(Graphics2D g) {
+    if (!plugin.isInTitheFarm()) {
+      return null;
+    }
+
     CoachStep s = plugin.getStep();
     panelComponent.setPreferredSize(new Dimension(310, 0));
     Color title =

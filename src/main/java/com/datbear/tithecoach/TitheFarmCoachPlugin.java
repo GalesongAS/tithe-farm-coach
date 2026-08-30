@@ -25,6 +25,8 @@ import net.runelite.client.ui.overlay.OverlayManager;
     description = "Read-only, one-step-at-a-time Tithe Farm route coach",
     tags = {"tithe", "farm", "farming", "coach"})
 public class TitheFarmCoachPlugin extends Plugin {
+  private static final int TITHE_FARM_REGION = 7222;
+
   private enum Phase {
     PLANTING,
     GROWING,
@@ -230,6 +232,12 @@ public class TitheFarmCoachPlugin extends Plugin {
   @Subscribe
   public void onGameTick(GameTick ignored) {
     updateRewardPoints();
+    if (!isInTitheFarm()) {
+      if (!plots.isEmpty() || !route.isEmpty()) {
+        reset();
+      }
+      return;
+    }
     if (plots.size() < 25) {
       setStep(preparationStep());
       return;
@@ -616,6 +624,19 @@ public class TitheFarmCoachPlugin extends Plugin {
 
   int getSeedItemId() {
     return seedId();
+  }
+
+  boolean isInTitheFarm() {
+    Player player = client.getLocalPlayer();
+    WorldView worldView = client.getTopLevelWorldView();
+    if (player == null || worldView == null || worldView.getScene() == null) {
+      return false;
+    }
+
+    WorldPoint templateLocation =
+        WorldPoint.fromLocalInstance(
+            worldView.getScene(), player.getLocalLocation(), worldView.getPlane());
+    return templateLocation != null && templateLocation.getRegionID() == TITHE_FARM_REGION;
   }
 
   int getWaterDoseCount() {
