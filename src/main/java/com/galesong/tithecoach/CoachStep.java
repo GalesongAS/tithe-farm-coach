@@ -1,4 +1,4 @@
-package com.datbear.tithecoach;
+package com.galesong.tithecoach;
 
 import net.runelite.api.coords.WorldPoint;
 

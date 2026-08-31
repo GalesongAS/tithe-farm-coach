@@ -1,4 +1,4 @@
-package com.datbear.tithecoach;
+package com.galesong.tithecoach;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

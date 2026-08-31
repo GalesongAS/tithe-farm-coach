@@ -1,4 +1,4 @@
-package com.datbear.tithecoach;
+package com.galesong.tithecoach;
 
 import com.google.inject.Inject;
 import net.runelite.api.events.GameTick;

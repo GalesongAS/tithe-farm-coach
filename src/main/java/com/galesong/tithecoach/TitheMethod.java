@@ -1,4 +1,4 @@
-package com.datbear.tithecoach;
+package com.galesong.tithecoach;
 
 public enum TitheMethod {
   RELAXED_8("Relaxed 8 - most forgiving", 8),
