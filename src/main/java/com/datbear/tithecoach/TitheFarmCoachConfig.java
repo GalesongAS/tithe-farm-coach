@@ -4,6 +4,8 @@ import net.runelite.client.config.*;
 
 @ConfigGroup("tithefarmcoach")
 public interface TitheFarmCoachConfig extends Config {
+  String PANEL_SECTION = "panel";
+
   @ConfigItem(
       keyName = "method",
       name = "Method",
@@ -59,5 +61,71 @@ public interface TitheFarmCoachConfig extends Config {
       position = 5)
   default int permanentPointsSpent() {
     return 0;
+  }
+
+  @ConfigSection(
+      name = "Panel contents",
+      description = "Choose which information is shown in the coach text panel",
+      position = 6)
+  String panelSection = PANEL_SECTION;
+
+  @ConfigItem(
+      keyName = "showActionDetails",
+      name = "Action explanation",
+      description = "Show the longer explanation below the current action",
+      position = 7,
+      section = PANEL_SECTION)
+  default boolean showActionDetails() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "showRunStatus",
+      name = "Run status",
+      description = "Show method, fruit, route size, and queued planting status",
+      position = 8,
+      section = PANEL_SECTION)
+  default boolean showRunStatus() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "showWaterStatus",
+      name = "Water status",
+      description = "Show available water doses or Gricoller's can charges",
+      position = 9,
+      section = PANEL_SECTION)
+  default boolean showWaterStatus() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "showRewardSummary",
+      name = "Reward summary",
+      description = "Show points, current set progress, batches, and buyout estimate",
+      position = 10,
+      section = PANEL_SECTION)
+  default boolean showRewardSummary() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "showShopBreakdown",
+      name = "Shop breakdown",
+      description = "Show the cost and affordability of every permanent reward",
+      position = 11,
+      section = PANEL_SECTION)
+  default boolean showShopBreakdown() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "showRepeatables",
+      name = "Repeatable costs",
+      description = "Show the point costs of repeatable shop purchases",
+      position = 12,
+      section = PANEL_SECTION)
+  default boolean showRepeatables() {
+    return true;
   }
 }

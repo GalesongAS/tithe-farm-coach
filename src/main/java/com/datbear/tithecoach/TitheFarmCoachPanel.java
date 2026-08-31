@@ -30,51 +30,87 @@ final class TitheFarmCoachPanel extends OverlayPanel {
             ? new Color(255, 80, 80)
             : s.kind == CoachStep.Kind.WAIT ? new Color(255, 205, 60) : new Color(100, 255, 130);
     panelComponent.getChildren().add(TitleComponent.builder().text("TITHE FARM COACH").build());
-    panelComponent
-        .getChildren()
-        .add(LineComponent.builder().left("Method:").right(config.method().toString()).build());
     panelComponent.getChildren().add(TitleComponent.builder().text(s.title).color(title).build());
-    for (String line : wrap(s.detail, 43))
-      panelComponent.getChildren().add(LineComponent.builder().left(line).build());
-    if (plugin.getQueuedPlantTarget() != null)
+    if (config.showActionDetails()) {
+      for (String line : wrap(s.detail, 43)) {
+        panelComponent.getChildren().add(LineComponent.builder().left(line).build());
+      }
+    }
+
+    if (config.showRunStatus()) {
+      panelComponent
+          .getChildren()
+          .add(LineComponent.builder().left("Method:").right(config.method().toString()).build());
+      if (plugin.getQueuedPlantTarget() != null) {
+        panelComponent
+            .getChildren()
+            .add(
+                LineComponent.builder()
+                    .left("Next planting click:")
+                    .right(plugin.isQueuedPlantClickReady() ? "READY" : "WAIT")
+                    .rightColor(
+                        plugin.isQueuedPlantClickReady()
+                            ? new Color(100, 255, 130)
+                            : new Color(255, 80, 80))
+                    .build());
+      }
       panelComponent
           .getChildren()
           .add(
               LineComponent.builder()
-                  .left("Next planting click:")
-                  .right(plugin.isQueuedPlantClickReady() ? "READY" : "WAIT")
-                  .rightColor(
-                      plugin.isQueuedPlantClickReady()
-                          ? new Color(100, 255, 130)
-                          : new Color(255, 80, 80))
+                  .left("Fruit harvested:")
+                  .right(plugin.getHarvestedTotal() + "/100")
                   .build());
-    panelComponent
-        .getChildren()
-        .add(
-            LineComponent.builder()
-                .left("Fruit harvested:")
-                .right(plugin.getHarvestedTotal() + "/100")
-                .build());
-    panelComponent
-        .getChildren()
-        .add(
-            LineComponent.builder()
-                .left("Route patches:")
-                .right(String.valueOf(plugin.getRoute().size()))
-                .build());
-    int doses = plugin.getWaterDoseCount(), needed = plugin.getRemainingWaterNeeded();
-    panelComponent
-        .getChildren()
-        .add(
-            LineComponent.builder()
-                .left(
-                    plugin.isUsingGricollersCan()
-                        ? "Gricoller charges / needed:"
-                        : "Water doses / needed:")
-                .right(doses + " / " + needed)
-                .rightColor(doses < needed ? new Color(255, 80, 80) : new Color(100, 255, 130))
-                .build());
-    panelComponent.getChildren().add(TitleComponent.builder().text("REWARD PROGRESS").build());
+      panelComponent
+          .getChildren()
+          .add(
+              LineComponent.builder()
+                  .left("Route patches:")
+                  .right(String.valueOf(plugin.getRoute().size()))
+                  .build());
+    }
+
+    if (config.showWaterStatus()) {
+      int doses = plugin.getWaterDoseCount();
+      int needed = plugin.getRemainingWaterNeeded();
+      panelComponent
+          .getChildren()
+          .add(
+              LineComponent.builder()
+                  .left(
+                      plugin.isUsingGricollersCan()
+                          ? "Gricoller charges / needed:"
+                          : "Water doses / needed:")
+                  .right(doses + " / " + needed)
+                  .rightColor(doses < needed ? new Color(255, 80, 80) : new Color(100, 255, 130))
+                  .build());
+    }
+
+    if (config.showRewardSummary() || config.showShopBreakdown() || config.showRepeatables()) {
+      panelComponent.getChildren().add(TitleComponent.builder().text("REWARD PROGRESS").build());
+    }
+    if (config.showRewardSummary()) {
+      rewardSummary();
+    }
+    if (config.showShopBreakdown()) {
+      reward("Farmer boots", 50);
+      reward("Auto-weed", 50);
+      reward("Farmer strawhat", 75);
+      reward("Farmer trousers", 125);
+      reward("Farmer top", 150);
+      reward("Gricoller's can", 200);
+      reward("Seed box", 250);
+      reward("Herb sack", 250);
+    }
+    if (config.showRepeatables()) {
+      panelComponent
+          .getChildren()
+          .add(LineComponent.builder().left("Repeatables:").right("1 / 2 / 5 / 30 pts").build());
+    }
+    return super.render(g);
+  }
+
+  private void rewardSummary() {
     panelComponent
         .getChildren()
         .add(
@@ -119,18 +155,6 @@ final class TitheFarmCoachPanel extends OverlayPanel {
                 .right(String.valueOf(plugin.getFullSetsToPermanentBuyout()))
                 .rightColor(new Color(255, 205, 60))
                 .build());
-    reward("Farmer boots", 50);
-    reward("Auto-weed", 50);
-    reward("Farmer strawhat", 75);
-    reward("Farmer trousers", 125);
-    reward("Farmer top", 150);
-    reward("Gricoller's can", 200);
-    reward("Seed box", 250);
-    reward("Herb sack", 250);
-    panelComponent
-        .getChildren()
-        .add(LineComponent.builder().left("Repeatables:").right("1 / 2 / 5 / 30 pts").build());
-    return super.render(g);
   }
 
   private void reward(String name, int cost) {
