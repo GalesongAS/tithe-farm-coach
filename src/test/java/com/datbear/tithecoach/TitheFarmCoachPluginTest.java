@@ -5,7 +5,8 @@ import net.runelite.client.externalplugins.ExternalPluginManager;
 
 public class TitheFarmCoachPluginTest {
   public static void main(String[] args) throws Exception {
-    ExternalPluginManager.loadBuiltin(TitheFarmCoachDebugPlugin.class);
+    ExternalPluginManager.loadBuiltin(
+        TitheFarmCoachPlugin.class, TitheFarmCoachDebugPlugin.class);
     RuneLite.main(args);
   }
 }
