@@ -327,15 +327,13 @@ public class TitheFarmCoachPlugin extends Plugin {
     }
 
     if (phase == Phase.GROWING) {
-      // Keep moving forward through the watering circuit. Only a plant which
-      // has remained dry long enough to be in real danger may interrupt it.
-      WorldPoint nextDry =
-          WateringPlanner.nextDry(route, plots, lastCompletedRouteIndex, Instant.now());
+      // Keep moving forward through the watering circuit. Cross-farm
+      // emergency redirects split the lap and leave groups of plants behind.
+      WorldPoint nextDry = WateringPlanner.nextDry(route, plots, lastCompletedRouteIndex);
       if (nextDry != null)
         return water(
             nextDry,
-            "Continue forward through the watering circuit. A near-death plant will override the"
-                + " route automatically.");
+            "Continue forward through the watering circuit without backtracking.");
       WorldPoint ripe = nextInRouteWithState(PlantState.GROWN);
       if (ripe != null)
         return new CoachStep(

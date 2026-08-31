@@ -1,32 +1,16 @@
 package com.datbear.tithecoach;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import net.runelite.api.coords.WorldPoint;
 
 final class WateringPlanner {
-  static final Duration EMERGENCY_AFTER = Duration.ofSeconds(45);
-
   private WateringPlanner() {}
 
   static WorldPoint nextDry(
       List<WorldPoint> route,
       Map<WorldPoint, TithePlot> plots,
-      int lastCompletedRouteIndex,
-      Instant now) {
-    WorldPoint emergency =
-        route.stream()
-            .filter(point -> isDry(plots, point))
-            .filter(point -> isEmergency(plots.get(point), now))
-            .min(Comparator.comparing(point -> plots.get(point).stageStarted))
-            .orElse(null);
-    if (emergency != null) {
-      return emergency;
-    }
-
+      int lastCompletedRouteIndex) {
     if (route.isEmpty()) {
       return null;
     }
@@ -45,8 +29,4 @@ final class WateringPlanner {
     return plot != null && plot.state == PlantState.DRY;
   }
 
-  private static boolean isEmergency(TithePlot plot, Instant now) {
-    return !plot.stageStarted.equals(Instant.EPOCH)
-        && Duration.between(plot.stageStarted, now).compareTo(EMERGENCY_AFTER) >= 0;
-  }
 }
