@@ -11,7 +11,6 @@ import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.gameval.VarbitID;
-import net.runelite.client.audio.AudioPlayer;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -38,7 +37,6 @@ public class TitheFarmCoachPlugin extends Plugin {
   @Inject private OverlayManager overlayManager;
   @Inject private TitheFarmCoachOverlay overlay;
   @Inject private TitheFarmCoachPanel panel;
-  @Inject private AudioPlayer audioPlayer;
 
   private final Map<WorldPoint, TithePlot> plots = new HashMap<>();
   private final List<WorldPoint> route = new ArrayList<>();
@@ -56,8 +54,6 @@ public class TitheFarmCoachPlugin extends Plugin {
   private int lastRewardPoints = -1;
   private int sessionPointsEarned = 0;
   private int setPointBaseline = -1;
-  private String lastAnnounced = "";
-  private EnglishVoice voice;
   private GameObject depositSack;
   private GameObject waterSource;
 
@@ -154,7 +150,6 @@ public class TitheFarmCoachPlugin extends Plugin {
 
   @Override
   protected void startUp() {
-    voice = new EnglishVoice(audioPlayer);
     overlayManager.add(overlay);
     overlayManager.add(panel);
   }
@@ -178,7 +173,6 @@ public class TitheFarmCoachPlugin extends Plugin {
       route.clear();
       phase = Phase.PLANTING;
       lastCompletedRouteIndex = -1;
-      lastAnnounced = "";
     }
   }
 
@@ -209,7 +203,6 @@ public class TitheFarmCoachPlugin extends Plugin {
       plot.state = state;
     }
     if (previous == PlantState.EMPTY && state != PlantState.EMPTY) {
-      plot.planted = Instant.now();
       plot.stageStarted = Instant.now();
       plot.wateringCount = 0;
     }
@@ -477,16 +470,6 @@ public class TitheFarmCoachPlugin extends Plugin {
     return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
   }
 
-  private WorldPoint nextActiveInRoute() {
-    if (route.isEmpty()) return null;
-    int start = (lastCompletedRouteIndex + 1 + route.size()) % route.size();
-    for (int offset = 0; offset < route.size(); offset++) {
-      WorldPoint candidate = route.get((start + offset) % route.size());
-      if (plot(candidate).state != PlantState.EMPTY) return candidate;
-    }
-    return route.get(start);
-  }
-
   private WorldPoint nextInRouteWithState(PlantState wanted) {
     if (route.isEmpty()) return null;
     int start = (lastCompletedRouteIndex + 1 + route.size()) % route.size();
@@ -510,9 +493,6 @@ public class TitheFarmCoachPlugin extends Plugin {
 
   private void setStep(CoachStep next) {
     step = next;
-    if (next.key().equals(lastAnnounced)) return;
-    lastAnnounced = next.key();
-    if (config.voice()) voice.speak(next.kind);
   }
 
   boolean hasItem(int id) {
@@ -699,7 +679,6 @@ public class TitheFarmCoachPlugin extends Plugin {
     phase = Phase.PLANTING;
     lastCompletedRouteIndex = -1;
     setPointBaseline = -1;
-    lastAnnounced = "";
   }
 
   private void reset() {

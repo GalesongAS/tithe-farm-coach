@@ -9,26 +9,19 @@ public interface TitheFarmCoachConfig extends Config {
   @ConfigItem(
       keyName = "method",
       name = "Method",
-      description = "Number of plants managed per batch",
+      description =
+          "Choose a route from most forgiving to most time-sensitive; larger routes leave less"
+              + " recovery time",
       position = 0)
   default TitheMethod method() {
     return TitheMethod.STANDARD_20;
   }
 
   @ConfigItem(
-      keyName = "voice",
-      name = "English voice prompts",
-      description = "Speak once when the required action changes",
-      position = 1)
-  default boolean voice() {
-    return false;
-  }
-
-  @ConfigItem(
       keyName = "showRouteNumbers",
       name = "Show route numbers",
       description = "Number every selected patch while highlighting the current one",
-      position = 3)
+      position = 1)
   default boolean showRouteNumbers() {
     return true;
   }
@@ -37,7 +30,7 @@ public interface TitheFarmCoachConfig extends Config {
       keyName = "readableTimers",
       name = "High-contrast plant timers",
       description = "Show a large progress bar and seconds over every live route plant",
-      position = 4)
+      position = 2)
   default boolean readableTimers() {
     return true;
   }
@@ -49,7 +42,7 @@ public interface TitheFarmCoachConfig extends Config {
       description =
           "Enter points already spent on outfit pieces, Auto-weed, Gricoller's can, seed box, or"
               + " herb sack",
-      position = 5)
+      position = 3)
   default int permanentPointsSpent() {
     return 0;
   }
@@ -57,14 +50,14 @@ public interface TitheFarmCoachConfig extends Config {
   @ConfigSection(
       name = "Panel contents",
       description = "Choose which information is shown in the coach text panel",
-      position = 6)
+      position = 4)
   String panelSection = PANEL_SECTION;
 
   @ConfigItem(
       keyName = "showActionDetails",
       name = "Action explanation",
       description = "Show the longer explanation below the current action",
-      position = 7,
+      position = 5,
       section = PANEL_SECTION)
   default boolean showActionDetails() {
     return true;
@@ -74,7 +67,7 @@ public interface TitheFarmCoachConfig extends Config {
       keyName = "showRunStatus",
       name = "Run status",
       description = "Show method, fruit, route size, and queued planting status",
-      position = 8,
+      position = 6,
       section = PANEL_SECTION)
   default boolean showRunStatus() {
     return true;
@@ -84,7 +77,7 @@ public interface TitheFarmCoachConfig extends Config {
       keyName = "showWaterStatus",
       name = "Water status",
       description = "Show available water doses or Gricoller's can charges",
-      position = 9,
+      position = 7,
       section = PANEL_SECTION)
   default boolean showWaterStatus() {
     return true;
@@ -94,7 +87,7 @@ public interface TitheFarmCoachConfig extends Config {
       keyName = "showRewardSummary",
       name = "Reward summary",
       description = "Show points, current set progress, batches, and buyout estimate",
-      position = 10,
+      position = 8,
       section = PANEL_SECTION)
   default boolean showRewardSummary() {
     return true;
@@ -104,7 +97,7 @@ public interface TitheFarmCoachConfig extends Config {
       keyName = "showShopBreakdown",
       name = "Shop breakdown",
       description = "Show the cost and affordability of every permanent reward",
-      position = 11,
+      position = 9,
       section = PANEL_SECTION)
   default boolean showShopBreakdown() {
     return true;

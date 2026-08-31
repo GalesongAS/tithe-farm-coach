@@ -8,7 +8,6 @@ final class TithePlot {
   final WorldPoint location;
   GameObject object;
   PlantState state;
-  Instant planted = Instant.EPOCH;
   Instant stageStarted = Instant.EPOCH;
   int wateringCount = 0;
 
