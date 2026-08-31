@@ -11,7 +11,6 @@ import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.gameval.VarbitID;
-import net.runelite.client.Notifier;
 import net.runelite.client.audio.AudioPlayer;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -39,7 +38,6 @@ public class TitheFarmCoachPlugin extends Plugin {
   @Inject private OverlayManager overlayManager;
   @Inject private TitheFarmCoachOverlay overlay;
   @Inject private TitheFarmCoachPanel panel;
-  @Inject private Notifier notifier;
   @Inject private AudioPlayer audioPlayer;
 
   private final Map<WorldPoint, TithePlot> plots = new HashMap<>();
@@ -514,7 +512,6 @@ public class TitheFarmCoachPlugin extends Plugin {
     step = next;
     if (next.key().equals(lastAnnounced)) return;
     lastAnnounced = next.key();
-    if (config.notifications()) notifier.notify(next.title + ". " + next.detail);
     if (config.voice()) voice.speak(next.kind);
   }
 

@@ -25,15 +25,6 @@ public interface TitheFarmCoachConfig extends Config {
   }
 
   @ConfigItem(
-      keyName = "notifications",
-      name = "Step notifications",
-      description = "Send a RuneLite notification when the step changes",
-      position = 2)
-  default boolean notifications() {
-    return false;
-  }
-
-  @ConfigItem(
       keyName = "showRouteNumbers",
       name = "Show route numbers",
       description = "Number every selected patch while highlighting the current one",
