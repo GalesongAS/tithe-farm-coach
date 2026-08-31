@@ -86,7 +86,7 @@ final class TitheFarmCoachPanel extends OverlayPanel {
                   .build());
     }
 
-    if (config.showRewardSummary() || config.showShopBreakdown() || config.showRepeatables()) {
+    if (config.showRewardSummary() || config.showShopBreakdown()) {
       panelComponent.getChildren().add(TitleComponent.builder().text("REWARD PROGRESS").build());
     }
     if (config.showRewardSummary()) {
@@ -101,11 +101,6 @@ final class TitheFarmCoachPanel extends OverlayPanel {
       reward("Gricoller's can", 200);
       reward("Seed box", 250);
       reward("Herb sack", 250);
-    }
-    if (config.showRepeatables()) {
-      panelComponent
-          .getChildren()
-          .add(LineComponent.builder().left("Repeatables:").right("1 / 2 / 5 / 30 pts").build());
     }
     return super.render(g);
   }

@@ -119,13 +119,4 @@ public interface TitheFarmCoachConfig extends Config {
     return true;
   }
 
-  @ConfigItem(
-      keyName = "showRepeatables",
-      name = "Repeatable costs",
-      description = "Show the point costs of repeatable shop purchases",
-      position = 12,
-      section = PANEL_SECTION)
-  default boolean showRepeatables() {
-    return true;
-  }
 }
