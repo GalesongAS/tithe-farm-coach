@@ -327,14 +327,15 @@ public class TitheFarmCoachPlugin extends Plugin {
     }
 
     if (phase == Phase.GROWING) {
-      // Plant death follows the original planting clock, so the oldest dry
-      // plant has the earliest real deadline even when that means breaking
-      // the visual lap order.
-      WorldPoint nextDry = oldestDryPlant();
+      // Keep moving forward through the watering circuit. Only a plant which
+      // has remained dry long enough to be in real danger may interrupt it.
+      WorldPoint nextDry =
+          WateringPlanner.nextDry(route, plots, lastCompletedRouteIndex, Instant.now());
       if (nextDry != null)
         return water(
             nextDry,
-            "Water the oldest endangered plant first; it has the earliest death deadline.");
+            "Continue forward through the watering circuit. A near-death plant will override the"
+                + " route automatically.");
       WorldPoint ripe = nextInRouteWithState(PlantState.GROWN);
       if (ripe != null)
         return new CoachStep(
@@ -418,13 +419,6 @@ public class TitheFarmCoachPlugin extends Plugin {
 
   private TithePlot plot(WorldPoint p) {
     return plots.get(p);
-  }
-
-  private WorldPoint oldestDryPlant() {
-    return route.stream()
-        .filter(p -> plot(p).state == PlantState.DRY)
-        .min(Comparator.comparing(p -> plot(p).planted))
-        .orElse(null);
   }
 
   private void buildRoute() {
