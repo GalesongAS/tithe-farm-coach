@@ -119,7 +119,7 @@ public class CoachEngineTest {
   public void rejectsInsufficientStartingWaterAndRefillsDuringAnActiveBatch() {
     supplies(23, 0);
     expect(CoachStep.Kind.PREPARE, -1);
-    assertTrue(coach.isBatchBlockedByWater());
+    assertTrue(coach.isBatchBlockedByWater(coach.inventory.waterDoseCount()));
     supplies(24, 0);
     expect(CoachStep.Kind.PLANT, 0);
     change(0, PlantState.DRY);
@@ -129,6 +129,21 @@ public class CoachEngineTest {
     assertEquals(CoachStep.Kind.REFILL, coach.step.kind);
     supplies(1, 0);
     expect(CoachStep.Kind.WATER, 0);
+  }
+
+  @Test
+  public void batchWaterWarningUsesCurrentDosesAndOnlyAppliesBeforeLivePlants() {
+    assertTrue(coach.isBatchBlockedByWater(23));
+    assertFalse(coach.isBatchBlockedByWater(24));
+    expect(CoachStep.Kind.PLANT, 0);
+    for (PlantState state : new PlantState[] {PlantState.DRY, PlantState.WATERED, PlantState.GROWN}) {
+      change(0, state);
+      assertFalse(coach.isBatchBlockedByWater(0));
+    }
+    change(0, PlantState.DEAD);
+    assertTrue(coach.isBatchBlockedByWater(0));
+    coach.route.clear();
+    assertFalse(coach.isBatchBlockedByWater(0));
   }
 
   @Test

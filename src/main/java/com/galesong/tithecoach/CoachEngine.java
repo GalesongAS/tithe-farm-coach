@@ -115,12 +115,10 @@ final class CoachEngine {
 
   // Returns null only when the next batch needs a freshly mapped route.
   CoachStep decide() {
-    int active = 0;
-    for (WorldPoint p : route)
-      if (plot(p).state != PlantState.EMPTY && plot(p).state != PlantState.DEAD) active++;
+    boolean active = hasActivePlants();
     // This is a pre-batch check only. After harvesting, fruit must be
     // deposited before water preparation is allowed to replace the advice.
-    if (active == 0
+    if (!active
         && inventory.fruitCount() == 0
         && phase == Phase.PLANTING
         && inventory.waterDoseCount() < requiredWaterDoses()) {
@@ -138,7 +136,7 @@ final class CoachEngine {
           null,
           -1);
     }
-    if (active > 0 && inventory.waterDoseCount() == 0)
+    if (active && inventory.waterDoseCount() == 0)
       return new CoachStep(
           CoachStep.Kind.REFILL,
           "OUT OF WATER - REFILL NOW",
@@ -311,12 +309,16 @@ final class CoachEngine {
     return needed;
   }
 
-  boolean isBatchBlockedByWater() {
-    if (route.isEmpty()) return false;
-    boolean active =
-        route.stream()
-            .anyMatch(p -> plot(p).state != PlantState.EMPTY && plot(p).state != PlantState.DEAD);
-    return !active && inventory.waterDoseCount() < requiredWaterDoses();
+  boolean isBatchBlockedByWater(int waterDoses) {
+    return !route.isEmpty() && !hasActivePlants() && waterDoses < requiredWaterDoses();
+  }
+
+  private boolean hasActivePlants() {
+    for (WorldPoint point : route) {
+      PlantState state = plot(point).state;
+      if (state != PlantState.EMPTY && state != PlantState.DEAD) return true;
+    }
+    return false;
   }
 
   int getHarvestedTotal() {

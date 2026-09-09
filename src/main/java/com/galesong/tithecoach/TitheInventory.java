@@ -42,7 +42,6 @@ final class TitheInventory {
   }
 
   int fruitCount() {
-    if (items == null) return 0;
     return count(ItemID.HOSIDIUS_TITHE_FRUIT_A)
         + count(ItemID.HOSIDIUS_TITHE_FRUIT_B)
         + count(ItemID.HOSIDIUS_TITHE_FRUIT_C);
@@ -70,7 +69,6 @@ final class TitheInventory {
 
   int waterDoseCount() {
     if (hasGricollersCan()) return Math.max(0, gricollerCharges);
-    if (items == null) return 0;
     return count(ItemID.WATERING_CAN_1)
         + 2 * count(ItemID.WATERING_CAN_2)
         + 3 * count(ItemID.WATERING_CAN_3)

@@ -268,7 +268,6 @@ public class TitheFarmCoachPlugin extends Plugin {
   }
 
   boolean isBatchBlockedByWater() {
-    coach.inventory = inventory();
-    return coach.isBatchBlockedByWater();
+    return coach.isBatchBlockedByWater(inventory().waterDoseCount());
   }
 }
