@@ -28,8 +28,4 @@ final class CoachStep {
     this.target = target;
     this.inventoryItem = inventoryItem;
   }
-
-  String key() {
-    return kind + ":" + (target == null ? "" : target.toString());
-  }
 }

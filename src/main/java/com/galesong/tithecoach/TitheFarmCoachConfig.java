@@ -35,7 +35,7 @@ public interface TitheFarmCoachConfig extends Config {
     return true;
   }
 
-  @Range(min = 0, max = 1150)
+  @Range(min = 0, max = CoachEngine.PERMANENT_REWARD_TOTAL)
   @ConfigItem(
       keyName = "permanentPointsSpent",
       name = "Points spent on permanent rewards",

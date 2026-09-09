@@ -13,7 +13,7 @@ repositories {
 	mavenCentral()
 }
 
-def runeLiteVersion = 'latest.release'
+def runeLiteVersion = '1.12.38'
 def pluginMainClass = 'com.galesong.tithecoach.TitheFarmCoachPluginTest'
 
 dependencies {
@@ -37,9 +37,4 @@ tasks.register('run', JavaExec) {
 	mainClass = pluginMainClass
 	jvmArgs "-ea"
 	args "--developer-mode", "--debug"
-}
-
-// Alias retained for existing local development shortcuts.
-tasks.register('runRuneLite') {
-	dependsOn tasks.named('run')
 }

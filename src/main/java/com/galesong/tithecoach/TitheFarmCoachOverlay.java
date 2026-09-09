@@ -76,12 +76,14 @@ final class TitheFarmCoachOverlay extends Overlay {
     net.runelite.api.Point canvas = Perspective.localToCanvas(client, local, plane, 95);
     if (canvas == null) return;
     long elapsed = Math.max(0, Duration.between(plot.stageStarted, Instant.now()).toMillis());
-    int remaining = (int) Math.max(0, 60 - (elapsed / 1000));
-    double progress = Math.min(1.0, elapsed / 60000.0);
+    int remaining = (int) Math.max(0, TithePlot.GROWTH_STAGE_SECONDS - (elapsed / 1000));
+    double progress = Math.min(1.0, elapsed / (TithePlot.GROWTH_STAGE_SECONDS * 1000.0));
     boolean dry = plot.state == PlantState.DRY;
     Color urgency =
         dry
-            ? (remaining <= 15 ? new Color(255, 45, 45) : new Color(255, 170, 25))
+            ? (remaining <= TithePlot.URGENT_SECONDS_REMAINING
+                ? new Color(255, 45, 45)
+                : new Color(255, 170, 25))
             : new Color(50, 235, 125);
     String text = (dry ? "DIE " : "WATER ") + remaining + "s";
     int width = 74, height = 13, x = canvas.getX() - width / 2, y = canvas.getY() - height / 2;
@@ -103,16 +105,23 @@ final class TitheFarmCoachOverlay extends Overlay {
 
   private Color routeStateColor(WorldPoint world) {
     TithePlot plot = plugin.getPlots().get(world);
-    if (plot == null || plot.state == PlantState.EMPTY) return new Color(70, 150, 255);
-    if (plot.state == PlantState.WATERED) return new Color(45, 225, 115);
-    if (plot.state == PlantState.GROWN) return new Color(205, 100, 255);
-    if (plot.state == PlantState.DEAD) return new Color(125, 25, 25);
-    if (plot.state == PlantState.DRY) {
-      if (plot.stageStarted.equals(Instant.EPOCH)) return new Color(255, 170, 25);
-      long elapsed = Duration.between(plot.stageStarted, Instant.now()).getSeconds();
-      return elapsed >= 45 ? new Color(255, 45, 45) : new Color(255, 170, 25);
+    if (plot == null) return new Color(70, 150, 255);
+    switch (plot.state) {
+      case WATERED:
+        return new Color(45, 225, 115);
+      case GROWN:
+        return new Color(205, 100, 255);
+      case DEAD:
+        return new Color(125, 25, 25);
+      case DRY:
+        if (plot.stageStarted.equals(Instant.EPOCH)) return new Color(255, 170, 25);
+        long elapsed = Duration.between(plot.stageStarted, Instant.now()).getSeconds();
+        return elapsed >= TithePlot.GROWTH_STAGE_SECONDS - TithePlot.URGENT_SECONDS_REMAINING
+            ? new Color(255, 45, 45)
+            : new Color(255, 170, 25);
+      default:
+        return new Color(70, 150, 255);
     }
-    return new Color(70, 150, 255);
   }
 
   private String actionLabel(CoachStep.Kind kind) {

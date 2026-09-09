@@ -48,8 +48,9 @@ final class DebugRunLogger implements AutoCloseable {
     recordTransitions();
 
     CoachStep step = plugin.getStep();
-    if (!step.key().equals(lastStepKey)) {
-      lastStepKey = step.key();
+    String stepKey = step.kind + ":" + (step.target == null ? "" : step.target.toString());
+    if (!stepKey.equals(lastStepKey)) {
+      lastStepKey = stepKey;
       write("INSTRUCTION_CHANGE", "", -1, false);
     }
 

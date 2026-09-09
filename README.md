@@ -43,6 +43,11 @@ items, or send keyboard input. Every game action remains with the player.
 - Purple: ready to harvest
 - Dark red: dead
 
+## Building from source
+
+Run `./gradlew clean build` to build the plugin and run its tests. On Windows,
+use `gradlew.bat clean build`.
+
 ## Privacy
 
 The plugin does not write gameplay logs, make network requests, or transmit
