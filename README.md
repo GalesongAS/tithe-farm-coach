@@ -43,11 +43,6 @@ items, or send keyboard input. Every game action remains with the player.
 - Purple: ready to harvest
 - Dark red: dead
 
-## Privacy
-
-The plugin does not write gameplay logs, make network requests, or transmit
-account or gameplay data.
-
 ## License
 
 BSD 2-Clause License. See [LICENSE](LICENSE).
